@@ -3,8 +3,9 @@ import './globals.css';
 import { useEffect, useState } from 'react';
 import { getMessages, MsgStruct, submitMessage } from './eth';
 import {BackgroundLines} from './welcome';
+import Thumb from './card/thumb';
 
-export default function Board() {
+export default function Home() {
     let [messages, setMessages] = useState<MsgStruct[]>([{text: 'Hello, World!', address: 'User1', nickname: 'User1', time: 1693459818}]);
 
     useEffect(() => {
@@ -12,21 +13,15 @@ export default function Board() {
             const ledgerMeesage = await getMessages();
             setMessages(ledgerMeesage);
         }
-
         loadMessages();
       }, []);
 
     return (
       <div>
-    <BackgroundLines className="flex items-center justify-center w-full flex-col px-4">
-      <h2 className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-2xl md:text-4xl lg:text-7xl font-sans py-2 md:py-10 relative z-20 font-bold tracking-tight">
-        赛博佛庙 <br /> Cyper Temple
-      </h2>
-      <p className="max-w-xl mx-auto text-sm md:text-lg text-neutral-700 dark:text-neutral-400 text-center">
-        你求名利，他卜吉凶，可怜我全无心肝，怎出得什么主意<br/> 
-        殿遏烟云，堂列钟鼎，堪笑人供此泥木，空费了多少钱财
-      </p>
-    </BackgroundLines>
+      <BackgroundLines className="flex items-center justify-center w-full flex-col px-4" />
+      <div>
+      <Thumb />
+      </div>
         <div>
           <InputBar />
           <div className="flex justify-center items-center min-h-screen">
@@ -69,14 +64,6 @@ function InputBar() {
 <div className="flex flex-col gap-4 p-6 bg-white shadow-md rounded-lg max-w-md mx-auto">
       <input className="w-full p-3 border border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" type="text" id='newMessage' placeholder="Write what you want" onChange={handleInputChange} value={inputValue} />
       <button className="w-full p-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out" onClick={clickHandler}>Submit</button>
-    </div>
-  )
-}
-
-function Title(){
-  return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4"> Bitemple </h1>
     </div>
   )
 }

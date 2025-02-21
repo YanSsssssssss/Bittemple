@@ -3,6 +3,7 @@ import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { motion } from "framer-motion";
 import React from "react";
+import "./globals.css";
 
 export const BackgroundLines = ({
   children,
@@ -19,6 +20,13 @@ export const BackgroundLines = ({
     <div className={cn("h-[20rem] md:h-screen w-full bg-white dark:bg-black", className)}>
       <SVG svgOptions={svgOptions} />
       {children}
+            <h2 className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-2xl md:text-4xl lg:text-7xl font-sans py-2 md:py-10 relative z-20 font-bold tracking-tight">
+        赛博佛庙 <br /> Cyper Temple
+      </h2>
+      <p className="font-zhi-mang-xing max-w-xl mx-auto md:text-2xl text-neutral-700 dark:text-neutral-400 text-center">
+        你求名利，他卜吉凶，可怜我全无心肝，怎出得什么主意<br/> 
+        殿遏烟云，堂列钟鼎，堪笑人供此泥木，空费了多少钱财
+      </p>
     </div>
   );
 };

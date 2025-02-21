@@ -6,20 +6,36 @@ import { twMerge } from "tailwind-merge";
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from 'next/link'
 
 export default function Thumb() {
-    return (
-        <div>
 
+    return (
+        <div className="flex flex-wrap justify-center items-center gap-4">
+            {buddhaList.map((item) => (            
+                <Link
+                className="w-1/2 lg:w-1/3 p-4"
+                key={item.id}
+                href={{
+                    pathname: `/card?id=${item.id}`,
+                }}>
+                <button key={item.id}  className="w-1/2 lg:w-1/3 p-4" >
+                    <Card imageUrl={item.image} >
+                    <p className="font-bold text-xl">{item.name}</p>
+                    <p className="font-normal text-sm">{item.desc}</p>
+                    </Card>
+                </button>
+            </Link>
+            ))}
         </div>        
-    )
+    );
 }
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
-export const Card = ({
+const Card = ({
   imageUrl,
   children,
   childrenClassName,
