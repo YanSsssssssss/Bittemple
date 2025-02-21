@@ -8,9 +8,9 @@ export interface MsgStruct {
 }
 
 // Sepolia 网络 RPC URL（你也可以使用 Infura 或 Alchemy 等服务）
-const provider = new ethers.JsonRpcProvider("");
+const provider = new ethers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/CgIS8gBoKOp3atEMXs4ZhEwuJVdFiAU0");
 
-const privateKey = "";  // 请确保你在代码中正确保管私钥
+const privateKey = "70a45ebde804808ea770145bd1758f1d7649449a5b3a9cb72dcb23930e6afb3c";  // 请确保你在代码中正确保管私钥
 const wallet = new ethers.Wallet(privateKey, provider);
 
 // 合约地址和 ABI
