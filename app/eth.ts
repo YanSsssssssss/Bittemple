@@ -154,12 +154,49 @@ export async function getMessages():Promise<MsgStruct[]> {
   try {
     const messages = await contract.getMsgList(1);
 
-	return messages.map((msg: any) => ({
+	const mockData = [{
+		text: 'ขอให้พระพุทธเจ้าคุ้มครองให้ฉันมีความสุขและปลอดภัยตลอดปีนี้  ',
+		address: '0x...1AB',
+		nickname: 'สมศักดิ์ ',
+		time: 23121,
+	},
+	{
+		text: '今年は仏様のご加護で、無事で平和な年になりますように',
+		address: '0x...BS1',
+		nickname: '山田西瓜郎',
+		time: 212121,
+	},
+	{
+		text: '文殊菩萨在上，保佑我今年考试顺利通过',
+		address: '0x...213',
+		nickname: '一名学渣',
+		time: 21231721,
+	},{
+		text: '文殊菩萨，你的狮子坐骑在狮驼岭当山大王呢啊！',
+		address: '0x...10',
+		nickname: '孙行者',
+		time: 21423121,
+	},
+	{
+		text: '普贤菩萨，吾儿红孩儿可还好啊',
+		address: '0x..OX3',
+		nickname: '牛魔王',
+		time: 21233121,
+	},{
+		text: '不动明王様、どうか私と私の家族を守り、今年も無事で幸せでありますように',
+		address: '0x...DD0',
+		nickname: 'tom',
+		time: 21253121,
+	}
+
+]
+
+	return mockData.concat(messages.map((msg: any) => ({
 		text: msg[0],
 		address: msg[1],
 		nickname: msg[2],
 		time: Number(msg[3])
-	}));
+	})));
   } catch (error) {
     console.error("Error:", error);
 	return []

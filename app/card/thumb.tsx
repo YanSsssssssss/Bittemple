@@ -17,7 +17,8 @@ export default function Thumb() {
                 className="w-1/2 lg:w-1/3 p-4"
                 key={item.id}
                 href={{
-                    pathname: `/card?id=${item.id}`,
+                    pathname: `/card`,
+                    query: { id: item.id },
                 }}>
                 <button key={item.id}  className="w-1/2 lg:w-1/3 p-4" >
                     <Card imageUrl={item.image} >
