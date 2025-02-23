@@ -15,43 +15,40 @@ type AuthProviderProps = {
 
 // 创建 Provider 组件
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  // 状态：存储钱包地址
-  const [walletAddress, setWalletAddress] = useState<string>('');
-  console.log('😩')
-  // 连接钱包函数
+    let userAddress=''
+//   const [walletAddress, setWalletAddress] = useState<string>('');
   const connectWallet = async () => {
-    console.log('😩')
     // 检查是否安装了 MetaMask
     if (typeof window.ethereum === 'undefined') {
         alert('请先安装 MetaMask 插件，请安装后刷新页面，并确保 MetaMask 已连接到本地链');
         return;
     }
 
-    try {
+    // try {
       // 请求用户授权
       const accounts = await window.ethereum.request({ 
         method: 'eth_requestAccounts'
       }) as string[]; // 告诉 TypeScript 返回的是字符串数组
       console.log(accounts)
       // 更新状态并保存到本地存储
-      setWalletAddress(accounts[0]);
+      userAddress = accounts[0];
       localStorage.setItem('walletAddress', accounts[0]);
-    } catch (error) {
-      console.error('连接失败:', error);
-    }
+    // } catch (error) {
+    //   console.error('连接失败:', error);
+    // }
   };
 
   // 初始化时检查本地存储
   useEffect(() => {
     const savedAddress = localStorage.getItem('walletAddress');
     if (savedAddress) {
-      setWalletAddress(savedAddress);
+        userAddress = savedAddress;
     }
   }, []);
 
   // 提供 Context 值
   const value = {
-    walletAddress,
+    walletAddress: userAddress,
     connectWallet,
   };
 

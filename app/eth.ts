@@ -7,13 +7,11 @@ export interface MsgStruct {
     time: number,
 }
 
-// Sepolia 网络 RPC URL（你也可以使用 Infura 或 Alchemy 等服务）
 const provider = new ethers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/CgIS8gBoKOp3atEMXs4ZhEwuJVdFiAU0");
 
 const privateKey = "70a45ebde804808ea770145bd1758f1d7649449a5b3a9cb72dcb23930e6afb3c";  // 请确保你在代码中正确保管私钥
 const wallet = new ethers.Wallet(privateKey, provider);
 
-// 合约地址和 ABI
 const contractAddress = "0x9AB674C725cD95E2211191B297cc54f94089BfA1";
 const contractABI = [
 	{
@@ -205,15 +203,25 @@ export async function getMessages():Promise<MsgStruct[]> {
 
 // 调用提交消息的函数
 export async function submitMessage(text: string, nickname: string) {
-  try {
-    const tx = await contract.submit(text, nickname);
-    await tx.wait();  // 等待交易确认
-    console.log("Message submitted successfully:", tx);
-  } catch (error) {
-    console.error("Error:", error);
-  }
+	try {
+		if (!window.ethereum) {
+			throw new Error("MetaMask not detected. Please install MetaMask.");
+		  }
+	  
+		  // 请求账户连接
+		  const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+		  if (accounts.length === 0) {
+			throw new Error("No accounts available in MetaMask.");
+		  }
+		  const { ethereum } = window as any;
+		  const provider = new ethers.BrowserProvider(ethereum);
+		  const signer = await provider.getSigner();
+		  const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+		const tx = await contract.submit(text, nickname);  // 调用合约方法
+		await tx.wait();  // 等待交易确认
+		console.log("Message submitted successfully:", tx);
+	  } catch (error) {
+		console.error("Error:", error);
+	  }
 }
-
-// getMessages();  // 获取消息示例
-// submitMessage("Hello, Sepolia!", "User1");  // 提交消息示例
-

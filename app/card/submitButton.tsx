@@ -394,7 +394,7 @@ function FloatingPanelSubmitButton({
 
 function FloatingPanelInput() {
   const handleSubmit = (note: string) => {
-    submitMessage(note, "User1")
+    submitMessage(note, "anonymous")
   }
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useRef ,useState} from "react";
 import { CardBody, CardContainer, CardItem } from "./card";
 import buddhaList from "./constance";
 import {SubmitButton} from "./submitButton";
@@ -9,16 +9,33 @@ import {useSearchParams} from 'next/navigation'
 import { ShimmerButton } from "../../components/magicui/shimmer-button";
 
 import WishList from "./wishList"
-import { useAuth } from "@/app/context/Auth";
 
 export function BuddhaCard() {
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const buddha = buddhaList.find((item) => item.id === id);
-    const { walletAddress, connectWallet } = useAuth();
     if (!buddha) {return null}
 
     const slideRef = useRef<HTMLDivElement>(null);
+
+    const [walletAddress, setWalletAddress] = useState(localStorage.getItem('walletAddress')?true: false);
+    const Wall = async() => {
+        if (typeof window.ethereum === 'undefined') {
+            alert('请先安装 MetaMask 插件，请安装后刷新页面，并确保 MetaMask 已连接到本地链');
+            return;
+        }
+        try {
+          const accounts = await window.ethereum.request({ 
+            method: 'eth_requestAccounts'
+          }) as string[]; 
+          console.log(JSON.stringify(accounts))
+          localStorage.setItem('walletAddress', accounts[0]);
+          setWalletAddress(true);
+        } catch (error) {
+          alert('metaMask连接失败:');
+        }
+      };
+
 
     return (
       <div className="h-screen fixed top-0 left-40">
@@ -52,9 +69,9 @@ export function BuddhaCard() {
           <div className="fixed top-0 right-14 p-4">
             {walletAddress ? (
                 <SubmitButton />) : (    
-                <ShimmerButton className="shadow-2xl" onClick={connectWallet} >
+                <ShimmerButton className="shadow-2xl" onClick={Wall} >
                         <span className="whitespace-pre-wrap text-center text-sm font-xs leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
-                        连接 MetaMask
+                        试试连接 MetaMask
                         </span>
                 </ShimmerButton>
             )}
