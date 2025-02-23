@@ -7,9 +7,16 @@ export interface MsgStruct {
     time: number,
 }
 
+declare const window: {ethereum: {
+    isMetaMask?: boolean;
+    request: (args: { method: string }) => Promise<string[]>;
+    enable?: () => Promise<string[]>;
+  };};
+
+
 const provider = new ethers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/CgIS8gBoKOp3atEMXs4ZhEwuJVdFiAU0");
 
-const privateKey: string = process.env.PRIVATE_KEY || '' ;  // 请确保你在代码中正确保管私钥
+const privateKey: string = process.env.PRIVATE_KEY || '' ;
 const wallet = new ethers.Wallet(privateKey, provider);
 
 const contractAddress = "0x9AB674C725cD95E2211191B297cc54f94089BfA1";
@@ -150,7 +157,7 @@ const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 
 export async function getMessages():Promise<MsgStruct[]> {
   try {
-    const messages = await contract.getMsgList(1);
+    const messages: string[] = await contract.getMsgList(1);
 
 	const mockData = [{
 		text: 'ขอให้พระพุทธเจ้าคุ้มครองให้ฉันมีความสุขและปลอดภัยตลอดปีนี้  ',
@@ -189,7 +196,7 @@ export async function getMessages():Promise<MsgStruct[]> {
 
 ]
 
-	return mockData.concat(messages.map((msg: any) => ({
+	return mockData.concat(messages.map((msg) => ({
 		text: msg[0],
 		address: `0x...${msg[1].slice(39)}`,
 		nickname: msg[2],
@@ -211,8 +218,8 @@ export async function submitMessage(text: string, nickname: string) {
 		  if (accounts.length === 0) {
 			throw new Error("No accounts available in MetaMask.");
 		  }
-		  const { ethereum } = window as any;
-		  const provider = new ethers.BrowserProvider(ethereum);
+
+		  const provider = new ethers.BrowserProvider(window.ethereum);
 		  const signer = await provider.getSigner();
 		  const contract = new ethers.Contract(contractAddress, contractABI, signer);
 

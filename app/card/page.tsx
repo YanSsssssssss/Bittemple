@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useRef ,useState} from "react";
+import {Suspense, useState} from "react";
 import { CardBody, CardContainer, CardItem } from "./card";
 import buddhaList from "./constance";
 import {SubmitButton} from "./submitButton";
@@ -9,16 +9,19 @@ import {useSearchParams} from 'next/navigation'
 import { ShimmerButton } from "../../components/magicui/shimmer-button";
 
 import WishList from "./wishList"
+declare const window: {ethereum: {
+    isMetaMask?: boolean;
+    request: (args: { method: string }) => Promise<string[]>;
+    enable?: () => Promise<string[]>;
+  };};
 
-export function BuddhaCard() {
+function BuddhaCard() {
+    const [walletAddress, setWalletAddress] = useState<boolean>(false);
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
     const buddha = buddhaList.find((item) => item.id === id);
     if (!buddha) {return null}
 
-    const slideRef = useRef<HTMLDivElement>(null);
-
-    const [walletAddress, setWalletAddress] = useState(localStorage.getItem('walletAddress')?true: false);
     const Wall = async() => {
         if (typeof window.ethereum === 'undefined') {
             alert('请先安装 MetaMask 插件，请安装后刷新页面，并确保 MetaMask 已连接到本地链');
@@ -32,6 +35,7 @@ export function BuddhaCard() {
           localStorage.setItem('walletAddress', accounts[0]);
           setWalletAddress(true);
         } catch (error) {
+            console.log(error);
           alert('metaMask连接失败:');
         }
       };
@@ -40,7 +44,7 @@ export function BuddhaCard() {
     return (
       <div className="h-screen fixed top-0 left-40">
           <CardContainer className="inter-var">
-            <CardBody ref={slideRef} className="bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border">
+            <CardBody className="bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border">
               <CardItem translateZ="50" className="text-xl font-bold text-neutral-600 dark:text-white">
                 {buddha.name}
               </CardItem>
@@ -81,4 +85,11 @@ export function BuddhaCard() {
     );
 }
 
-export default BuddhaCard;
+// 在页面中包裹 BuddhaCard 组件，并加上 Suspense 边界
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <BuddhaCard />
+        </Suspense>
+    );
+}

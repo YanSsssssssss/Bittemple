@@ -33,7 +33,7 @@ const ReviewCard = ({
       )}
     >
       <div className="flex flex-row items-center gap-2">
-        <img className="rounded-full" width="32" height="32" alt="" src={imgList[Math.floor(Math.random() * imgList.length)]} suppressHydrationWarning/>
+        <img className="rounded-full" width="32" height="32" src={imgList[Math.floor(Math.random() * imgList.length)]} suppressHydrationWarning/>
         <div className="flex flex-col">
           <figcaption className="text-sm font-medium dark:text-white">{nickname}</figcaption>
           <p className="text-xs font-medium dark:text-white/40">{address}</p>
@@ -45,7 +45,7 @@ const ReviewCard = ({
 }
 
 export default function WishList() {
-    let [messages, setMessages] = useState<MsgStruct[]>([{text: 'Hello, World!', address: 'User1', nickname: 'User1', time: 1693459818}]);
+    const [messages, setMessages] = useState<MsgStruct[]>([{text: 'Hello, World!', address: '0x...001', nickname: 'User1', time: 1693459818}]);
 
     useEffect(() => {
        async function loadMessages() {

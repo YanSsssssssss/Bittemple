@@ -6,11 +6,9 @@ import React from "react";
 import "./globals.css";
 
 export const BackgroundLines = ({
-  children,
   className,
   svgOptions,
 }: {
-  children: React.ReactNode;
   className?: string;
   svgOptions?: {
     duration?: number;
@@ -19,8 +17,7 @@ export const BackgroundLines = ({
   return (
     <div className={cn("h-[20rem] md:h-screen w-full bg-white dark:bg-black", className)}>
       <SVG svgOptions={svgOptions} />
-      {children}
-            <h2 className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-2xl md:text-4xl lg:text-7xl font-sans py-2 md:py-10 relative z-20 font-bold tracking-tight">
+      <h2 className="bg-clip-text text-transparent text-center bg-gradient-to-b from-neutral-900 to-neutral-700 dark:from-neutral-600 dark:to-white text-2xl md:text-4xl lg:text-7xl font-sans py-2 md:py-10 relative z-20 font-bold tracking-tight">
         赛博佛庙 <br /> Cyper Temple
       </h2>
       <p className="font-zhi-mang-xing max-w-xl mx-auto md:text-2xl text-neutral-700 dark:text-neutral-400 text-center">
