@@ -154,7 +154,6 @@ const contractABI = [
 
 const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 
-
 export async function getMessages():Promise<MsgStruct[]> {
   try {
     const messages: string[] = await contract.getMsgList(1);
