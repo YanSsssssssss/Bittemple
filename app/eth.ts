@@ -9,7 +9,7 @@ export interface MsgStruct {
 
 const provider = new ethers.JsonRpcProvider("https://eth-sepolia.g.alchemy.com/v2/CgIS8gBoKOp3atEMXs4ZhEwuJVdFiAU0");
 
-const privateKey = "70a45ebde804808ea770145bd1758f1d7649449a5b3a9cb72dcb23930e6afb3c";  // 请确保你在代码中正确保管私钥
+const privateKey: string = process.env.PRIVATE_KEY || '' ;  // 请确保你在代码中正确保管私钥
 const wallet = new ethers.Wallet(privateKey, provider);
 
 const contractAddress = "0x9AB674C725cD95E2211191B297cc54f94089BfA1";
@@ -144,10 +144,10 @@ const contractABI = [
 		"type": "function"
 	}
 ]
-// 创建合约实例
+
 const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 
-// 调用合约方法（例如调用 `getMsgList` 获取消息）
+
 export async function getMessages():Promise<MsgStruct[]> {
   try {
     const messages = await contract.getMsgList(1);
@@ -171,7 +171,7 @@ export async function getMessages():Promise<MsgStruct[]> {
 		time: 21231721,
 	},{
 		text: '文殊菩萨，你的狮子坐骑在狮驼岭当山大王呢啊！',
-		address: '0x...10',
+		address: '0x...310',
 		nickname: '孙行者',
 		time: 21423121,
 	},
@@ -191,7 +191,7 @@ export async function getMessages():Promise<MsgStruct[]> {
 
 	return mockData.concat(messages.map((msg: any) => ({
 		text: msg[0],
-		address: msg[1],
+		address: `0x...${msg[1].slice(39)}`,
 		nickname: msg[2],
 		time: Number(msg[3])
 	})));
@@ -201,14 +201,12 @@ export async function getMessages():Promise<MsgStruct[]> {
   }
 }
 
-// 调用提交消息的函数
 export async function submitMessage(text: string, nickname: string) {
 	try {
 		if (!window.ethereum) {
 			throw new Error("MetaMask not detected. Please install MetaMask.");
 		  }
 	  
-		  // 请求账户连接
 		  const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
 		  if (accounts.length === 0) {
 			throw new Error("No accounts available in MetaMask.");
@@ -218,7 +216,7 @@ export async function submitMessage(text: string, nickname: string) {
 		  const signer = await provider.getSigner();
 		  const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
-		const tx = await contract.submit(text, nickname);  // 调用合约方法
+		const tx = await contract.submit(text, nickname);
 		await tx.wait();  // 等待交易确认
 		console.log("Message submitted successfully:", tx);
 	  } catch (error) {
